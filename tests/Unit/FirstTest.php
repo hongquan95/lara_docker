@@ -26,5 +26,6 @@ class FirstTest extends TestCase
     public function test_second()
     {
         $this->assertTrue(2==2);
+        $this->assertTrue(2==2);
     }
 }
