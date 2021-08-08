@@ -17,4 +17,14 @@ class FirstTest extends TestCase
         $this->assertTrue(1+1==2);
         $this->assertTrue(1==1);
     }
+
+    /**
+     * A basic unit test example.
+     *
+     * @return void
+     */
+    public function test_second()
+    {
+        $this->assertTrue(2==2);
+    }
 }
