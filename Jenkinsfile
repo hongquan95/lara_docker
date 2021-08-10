@@ -32,8 +32,8 @@ pipeline {
             steps {
                 sh "docker build -t ${DOCKER_IMAGE}:v-${DOCKER_TAG} ."
                 // sh "docker run -it --rm ${DOCKER_IMAGE}:v-${DOCKER_TAG} php artisan test"
-                sh "git ls-remote https://github.com/hongquan95/lara_docker"
-                sh "echo ${GIT_BRANCH}-${DOCKER_TAG}"
+                // sh "git ls-remote https://github.com/hongquan95/lara_docker"
+                // sh "echo ${GIT_BRANCH}-${DOCKER_TAG}"
             }
         }
         stage("Deploy") {
