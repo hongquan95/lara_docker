@@ -1,20 +1,45 @@
 pipeline {
-    agent any
+    agent none
+    environment {
+        DOCKER_IMAGE = "hongquan95/lara_docker"
+        DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+    }
+
+    stage("build") {
+            steps {
+                sh "docker build -t '${DOCKER_IMAGE}:v-${DOCKER_TAG}' . "
+                sh "docker push '${DOCKER_IMAGE}:v-${DOCKER_TAG}'"
+                sh "docker image ls | grep ${DOCKER_IMAGE}"
+                script {
+                    if (GIT_BRANCH ==~ /.*master.*/) {
+                        sh "docker tag '${DOCKER_IMAGE}:v-${DOCKER_TAG}' ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
+                    }
+                }
+            }
+        }
     stages {
-        stage('Build') {
+        stage("Test") {
             steps {
-                echo 'Building..'
+                sh "docker run -it --rm '${DOCKER_IMAGE}:v-${DOCKER_TAG}' php artisan test"
             }
         }
-        stage('Test') {
+    }
+
+    stages {
+        stage("Deploy") {
             steps {
-                echo 'Testing..'
+                sh "echo Deploy"
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
+    }
+
+    post {
+        success {
+            echo "SUCCESSFUL"
+        }
+        failure {
+            echo "FAILED"
         }
     }
 }
