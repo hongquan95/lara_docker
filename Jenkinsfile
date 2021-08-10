@@ -26,13 +26,13 @@ pipeline {
 
         stage("Test") {
             agent { node {label 'master'}}
-            // environment {
-                // DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
-            // }
+            environment {
+                DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+            }
             steps {
                 // sh "docker run -it --rm ${DOCKER_IMAGE}:v-${DOCKER_TAG} php artisan test"
                 sh "git ls-remote https://github.com/hongquan95/lara_docker"
-                sh "echo ${GIT_BRANCH}-${GIT_COMMIT}"
+                sh "echo ${GIT_BRANCH}-${DOCKER_TAG}"
             }
         }
         stage("Deploy") {
